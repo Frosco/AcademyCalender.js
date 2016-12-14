@@ -1,0 +1,50 @@
+﻿<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="node_modules/fullcalendar/dist/fullcalendar.css" rel="stylesheet" />
+    <link href="Styles/StyleSheet.css" rel="stylesheet" />
+</head>
+<body>
+    <center>
+        <div class="header">
+            <img src="~/bilder/headertest.png" />
+        </div>
+    </center>
+    <nav class="navbar navbar-inverse">
+
+        <div id="headermenu" class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li><a href="/home/home" id="menulink">Boka</a></li>
+                <li><a href="/home/showbooking" id="menulink">Mina bokningar</a></li>
+                <li><a href="/home/usersetting" id="menusetting">Inställningar</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="menuadmin">Admin<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/admin/createroom">Lägg till rum</a></li>
+                        <li><a href="/admin/editroom">Hantera rum</a></li>
+                        <li><a href="/admin/createadmin">Lägg till ny admin</a></li>
+                        <li><a href="/admin/adminsetting">inställningar</a></li>
+                        <li><a href="/admin/deleteuser">Ta bort användare</a></li>
+                    </ul>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><input type="button" class="button" value="Logga ut" onclick="logout()"></li>
+            </ul>
+        </div>
+        
+    </nav>
+
+    <div>
+        <div id="calendar"></div>
+    </div>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="node_modules/moment/moment.js"></script>
+    <script src="node_modules/fullcalendar/dist/fullcalendar.js"></script>
+    <script src="node_modules/fullcalendar/dist/locale/sv.js"></script>
+    <script src="Scripts/CalendarHandler.js"></script>
+</body>
+</html>
