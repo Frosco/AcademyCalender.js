@@ -5,30 +5,34 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AcademyCalendarWebservice.Models.Entities;
 
+// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+
 namespace AcademyCalendarWebservice.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class CalendarController : Controller
     {
         CalendarContext context;
 
-        public ValuesController(CalendarContext context)
+        public CalendarController(CalendarContext context)
         {
             this.context = context;
         }
 
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        // GET: api/calendar/rooms
+        [HttpGet("rooms")]
+        public async Task<JsonResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = await context.GetAllRooms();
+            return Json(result);
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET api/calendar/id/startTime/endTime
+        [HttpGet("{id}/{startTime}/{endTime}")]
+        public async Task<JsonResult> Get(int id, DateTime startTime, DateTime endTime)
         {
-            return "value";
+            var result = await context.GetBookings(id, startTime, endTime);
+            return Json(result);
         }
 
         // POST api/values

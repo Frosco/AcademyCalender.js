@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using AcademyCalendarWebservice.Models.Entities;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using AcademyCalendarWebservice.Models;
 
 namespace AcademyCalendarWebservice
 {
@@ -27,8 +31,18 @@ namespace AcademyCalendarWebservice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connString = @"Data Source=(localdb)\mssqllocaldb;Initial Catalog=Frank;Integrated Security=True";
+
+            services.AddDbContext<CalendarContext>(o =>
+                o.UseSqlServer(connString));
             // Add framework services.
             services.AddMvc();
+
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<Room, RoomVM>();
+                config.CreateMap<Booking, BookingVM>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
