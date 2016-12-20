@@ -35,7 +35,11 @@ function LoadEvents() {
     $.getJSON(url, function (result) {
         console.log(result);
         var events = new Array();
+        var existingEvents = $('#calendar').fullCalendar('clientEvents');
+
         for (var i = 0; i < result.length; i++) {
+
+
             events.push({
                 id: result[i].id,
                 start: result[i].startTime.toLocaleString(),

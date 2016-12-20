@@ -9,7 +9,7 @@ namespace AcademyCalendarWebservice.Models.Entities
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\mssqllocaldb;Initial Catalog=Frank;Integrated Security=True");
+            optionsBuilder.UseSqlServer(@"Data Source=localhost;Initial Catalog=Frank;Integrated Security=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -65,7 +65,7 @@ namespace AcademyCalendarWebservice.Models.Entities
             modelBuilder.Entity<Room>(entity =>
             {
                 entity.HasIndex(e => e.Name)
-                    .HasName("UQ__Room__737584F65799749E")
+                    .HasName("UQ__Room__737584F6A68708F4")
                     .IsUnique();
 
                 entity.Property(e => e.HasProjector).HasColumnName("Has_Projector");

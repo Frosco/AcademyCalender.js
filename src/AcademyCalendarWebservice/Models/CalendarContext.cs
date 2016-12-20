@@ -17,7 +17,7 @@ namespace AcademyCalendarWebservice.Models.Entities
 
         public async Task<BookingVM[]> GetBookings(int roomId, DateTime start, DateTime end)
         {
-            var bookings = await Booking.Where(r => r.Id == roomId && r.EndTime > start && r.StartTime < end).ToArrayAsync();
+            var bookings = await Booking.Where(r => r.RoomId == roomId && r.EndTime > start && r.StartTime < end).ToArrayAsync();
             return Mapper.Map<BookingVM[]>(bookings);
         }
     }
