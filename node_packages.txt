@@ -1,0 +1,6 @@
+Run these lines from the command window in the "frontend" folder:
+
+npm install jquery
+npm install bootstrap@3
+npm install moment
+npm install fullcalendar

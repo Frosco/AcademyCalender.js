@@ -8,9 +8,9 @@
     <link href="Styles/StyleSheet.css" rel="stylesheet" />
 </head>
 <body>
-        <div class="header">
-            <img src="Images/headertest.png" />
-        </div>
+    <div class="header">
+        <img src="Images/headertest.png" />
+    </div>
     <nav class="navbar navbar-inverse">
 
         <div id="headermenu" class="container-fluid">
@@ -32,11 +32,22 @@
                 <li><input type="button" class="button" value="Logga ut" onclick="logout()"></li>
             </ul>
         </div>
-        
+
     </nav>
 
     <div>
-        <div id="calendar"></div>
+        <div id="all">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="chooseroom" data-toggle="dropdown">
+                    Välj rum
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    
+                </ul>
+            </div>
+            <div id="calendar"></div>
+        </div>
     </div>
     <script src="node_modules/jquery/dist/jquery.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
