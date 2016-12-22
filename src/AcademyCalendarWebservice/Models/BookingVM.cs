@@ -14,5 +14,6 @@ namespace AcademyCalendarWebservice.Models
         public int OccupantId { get; set; }
         public string Title { get; set; }
         public string Decription { get; set; }
+        public string OccupantName { get; set; }
     }
 }

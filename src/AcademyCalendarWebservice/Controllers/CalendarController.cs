@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AcademyCalendarWebservice.Models.Entities;
+using AcademyCalendarWebservice.Models;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -35,10 +36,12 @@ namespace AcademyCalendarWebservice.Controllers
             return Json(result);
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+        // POST api/calendar/book
+        [HttpPost("book")]
+        public async Task<bool> Book([FromBody]BookingVM booking)
         {
+            await context.BookRoom(booking);
+            return true;
         }
 
         // PUT api/values/5

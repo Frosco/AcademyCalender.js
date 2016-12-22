@@ -18,7 +18,22 @@ namespace AcademyCalendarWebservice.Models.Entities
         public async Task<BookingVM[]> GetBookings(int roomId, DateTime start, DateTime end)
         {
             var bookings = await Booking.Where(r => r.RoomId == roomId && r.EndTime > start && r.StartTime < end).ToArrayAsync();
-            return Mapper.Map<BookingVM[]>(bookings);
+            var bookingVM =  Mapper.Map<BookingVM[]>(bookings);
+
+            foreach (var booking in bookingVM)
+            {
+                var occupant = Occupant.FirstOrDefault(o => o.Id == booking.OccupantId);
+                booking.OccupantName = occupant.FirstName + " " + occupant.LastName;
+            }
+
+            return bookingVM;
+        }
+        public async Task BookRoom(BookingVM booking)
+        {
+            var newBooking = Mapper.Map<Booking>(booking);
+
+            Booking.Add(newBooking);
+            await SaveChangesAsync();
         }
     }
 }

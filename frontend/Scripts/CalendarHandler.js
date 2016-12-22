@@ -1,5 +1,6 @@
 ﻿
 'use strict';
+
 var baseUrl = 'http://localhost:18332/api/calendar/';
 var roomList = new Array();
 
@@ -23,8 +24,6 @@ function getCalendar(roomID) {
 
     var room = findRoom(roomID);
 
-    console.log(room);
-
     $("#title").text(room.name + ' (' + room.capacity + ' platser)');
 
     if (room.hasTvScreen === true) {
@@ -47,7 +46,7 @@ function getCalendar(roomID) {
     else {
         $('#Whiteboardimage').fadeOut();
     }
-    
+
 
     $('#calendar').fullCalendar('destroy');
     $('#calendar').fullCalendar({
@@ -61,19 +60,43 @@ function getCalendar(roomID) {
         viewRender: function (view, element) {
             LoadEvents(room.id);
         },
+        eventRender: function (event, element) {
+            element.append(event.description)
+        }
     });
 
-    
+    var booking = {
+        startTime: '2016-12-23T14:00:00',
+        endTime: '2016-12-23T16:00:00',
+        roomID: 1,
+        occupantId: 2,
+        title: 'Mote',
+        description: 'Very important'
+    };
+
+    console.log(booking);
+    console.log(JSON.stringify(booking));
+
+    $.ajax({
+        type: 'POST',
+        url: baseUrl + 'Book',
+        contentType: 'application/json',
+        dataType: 'application/json',
+        data: JSON.stringify(booking),
+        success: function (result) {
+            alert(result);
+        }
+    });
 
 
-    
+
 }
 
 
 function LoadEvents(roomID) {
 
-    
-    
+
+
     var startTime = $('#calendar').fullCalendar('getView').intervalStart.format();
     var endTime = $('#calendar').fullCalendar('getView').intervalEnd.format();
 
@@ -88,22 +111,24 @@ function LoadEvents(roomID) {
             existingEventIDs.push(this.id);
         })
 
-        var events = new Array();
+        var newEvents = new Array();
 
         for (var i = 0; i < result.length; i++) {
 
             // Check if the event coming from the API is not yet displayed in the calendar (through checking with the ID list).
             if (($.inArray(result[i].id, existingEventIDs) === -1)) {
-                events.push({
+                newEvents.push({
                     id: result[i].id,
                     start: result[i].startTime.toLocaleString(),
                     end: result[i].endTime.toLocaleString(),
-                    title: result[i].title
+                    title: result[i].title,
+                    description: result[i].occupantName
                 });
             }
 
         }
-        $('#calendar').fullCalendar('renderEvents', events, true);
+        console.log(newEvents);
+        $('#calendar').fullCalendar('renderEvents', newEvents, true);
     });
 }
 
