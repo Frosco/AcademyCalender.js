@@ -27,11 +27,11 @@ namespace AcademyCalendarWebservice.Controllers
             return Json(result);
         }
 
-        // GET api/calendar/id/startTime/endTime
-        [HttpGet("{id}/{startTime}/{endTime}")]
-        public async Task<JsonResult> Get(int id, DateTime startTime, DateTime endTime)
+        // GET api/calendar/roomId/startTime/endTime
+        [HttpGet("{roomId}/{startTime}/{endTime}")]
+        public async Task<JsonResult> Get(int roomId, DateTime startTime, DateTime endTime)
         {
-            var result = await context.GetBookings(id, startTime, endTime);
+            var result = await context.GetBookings(roomId, startTime, endTime);
             return Json(result);
         }
 

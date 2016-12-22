@@ -1,5 +1,5 @@
 ﻿
-
+'use strict';
 var baseUrl = 'http://localhost:18332/api/calendar/';
 var roomList = new Array();
 
@@ -10,6 +10,7 @@ $(document).ready(function () {
 });
 
 function getCalendar(roomID) {
+
 
     // Find the room with the ID passed into the function
     var findRoom = function (roomID) {
@@ -24,6 +25,31 @@ function getCalendar(roomID) {
 
     console.log(room);
 
+    $("#title").text(room.name + ' (' + room.capacity + ' platser)');
+
+    if (room.hasTvScreen === true) {
+        $('#Tvimage').fadeIn();
+    }
+    else {
+        $('#Tvimage').fadeOut();
+    }
+
+    if (room.hasProjector === true) {
+        $('#Projectorimage').fadeIn();
+    }
+    else {
+        $('#Projectorimage').fadeOut();
+    }
+
+    if (room.hasWhiteBoard === true) {
+        $('#Whiteboardimage').fadeIn();
+    }
+    else {
+        $('#Whiteboardimage').fadeOut();
+    }
+    
+
+    $('#calendar').fullCalendar('destroy');
     $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
@@ -33,9 +59,14 @@ function getCalendar(roomID) {
         defaultView: 'agendaWeek',
         editable: true,
         viewRender: function (view, element) {
-            LoadEvents(roomID);
-        }
+            LoadEvents(room.id);
+        },
     });
+
+    
+
+
+    
 }
 
 
@@ -61,7 +92,7 @@ function LoadEvents(roomID) {
 
         for (var i = 0; i < result.length; i++) {
 
-            // Check if the event coming from the API is already displayed in the calendar (through checking with the ID list), otherwise add it.
+            // Check if the event coming from the API is not yet displayed in the calendar (through checking with the ID list).
             if (($.inArray(result[i].id, existingEventIDs) === -1)) {
                 events.push({
                     id: result[i].id,
@@ -77,7 +108,7 @@ function LoadEvents(roomID) {
 }
 
 function GetRooms() {
-    var roomUrl = baseUrl + '/rooms';
+    var roomUrl = baseUrl + 'rooms';
 
     $.getJSON(roomUrl, function (result) {
 
