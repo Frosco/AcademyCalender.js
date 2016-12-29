@@ -37,10 +37,11 @@ namespace AcademyCalendarWebservice.Controllers
         }
 
         // POST api/calendar/book
-        [HttpPost("book")]
-        public async Task<bool> Book([FromBody]BookingVM booking)
+        [HttpPost]
+        public async Task<bool> Post([FromBody]string booking)
         {
-            await context.BookRoom(booking);
+            //await context.BookRoom(booking);
+            var message = booking;
             return true;
         }
 

@@ -31,7 +31,7 @@ namespace AcademyCalendarWebservice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connString = @"Data Source=(localdb)\mssqllocaldb;Initial Catalog=Frank;Integrated Security=True";
+            var connString = @"Data Source=localhost;Initial Catalog=Frank;Integrated Security=True";
 
             services.AddDbContext<CalendarContext>(o =>
                 o.UseSqlServer(connString));

@@ -66,12 +66,12 @@ function getCalendar(roomID) {
     });
 
     var booking = {
-        startTime: '2016-12-23T14:00:00',
-        endTime: '2016-12-23T16:00:00',
-        roomID: 1,
-        occupantId: 2,
-        title: 'Mote',
-        description: 'Very important'
+        StartTime: '2016-12-23T14:00:00',
+        EndTime: '2016-12-23T16:00:00',
+        RoomId: 1,
+        OccupantId: 2,
+        Title: 'Mote',
+        Description: 'Very important'
     };
 
     console.log(booking);
@@ -79,13 +79,13 @@ function getCalendar(roomID) {
 
     $.ajax({
         type: 'POST',
-        url: baseUrl + 'Book',
-        contentType: 'application/json',
-        dataType: 'application/json',
+        url: baseUrl,
         data: JSON.stringify(booking),
-        success: function (result) {
-            alert(result);
-        }
+        contentType: 'application/json',
+        //dataType: 'application/json',
+        //success: function (result) {
+        //    alert(result);
+        //}
     });
 
 
