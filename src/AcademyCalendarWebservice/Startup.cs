@@ -11,6 +11,10 @@ using AcademyCalendarWebservice.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AcademyCalendarWebservice.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace AcademyCalendarWebservice
 {
@@ -33,10 +37,27 @@ namespace AcademyCalendarWebservice
         {
             var connString = @"Data Source=localhost;Initial Catalog=Frank;Integrated Security=True";
 
+            // Enable Cross origin requests, because the AJAX POST calls on the front end require this.
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowHeaders",
+                    builder => builder.WithOrigins("http://localhost:3263")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                        );
+                options.AddPolicy("AllOrigins",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    );
+            });
+
             services.AddDbContext<CalendarContext>(o =>
                 o.UseSqlServer(connString));
+
             // Add framework services.
             services.AddMvc();
+
 
             Mapper.Initialize(config =>
             {
@@ -49,9 +70,11 @@ namespace AcademyCalendarWebservice
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            // Allow all origins for cross origin calls
             app.UseMvc();
         }
     }

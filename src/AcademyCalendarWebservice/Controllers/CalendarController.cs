@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AcademyCalendarWebservice.Models.Entities;
 using AcademyCalendarWebservice.Models;
+using Microsoft.AspNetCore.Cors;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,6 +22,7 @@ namespace AcademyCalendarWebservice.Controllers
         }
 
         // GET: api/calendar/rooms
+        [EnableCors("AllOrigins")]
         [HttpGet("rooms")]
         public async Task<JsonResult> Get()
         {
@@ -29,6 +31,7 @@ namespace AcademyCalendarWebservice.Controllers
         }
 
         // GET api/calendar/roomId/startTime/endTime
+        [EnableCors("AllOrigins")]
         [HttpGet("{roomId}/{startTime}/{endTime}")]
         public async Task<JsonResult> Get(int roomId, DateTime startTime, DateTime endTime)
         {
@@ -37,9 +40,12 @@ namespace AcademyCalendarWebservice.Controllers
         }
 
         // POST api/calendar/book
-        [HttpPost]
-        public async Task<bool> Post([FromBody]string booking)
+        [EnableCors("AllowHeaders")]
+        [HttpPost("book")]
+        public async Task<bool> Create([FromBody]BookingVM booking)
         {
+            if (booking == null)
+                return false;
             //await context.BookRoom(booking);
             var message = booking;
             return true;
