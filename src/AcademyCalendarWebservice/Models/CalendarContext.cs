@@ -28,11 +28,9 @@ namespace AcademyCalendarWebservice.Models.Entities
 
             return bookingVM;
         }
-        public async Task BookRoom(BookingVM booking)
+        public async Task BookRoom(Booking booking)
         {
-            var newBooking = Mapper.Map<Booking>(booking);
-
-            Booking.Add(newBooking);
+            Booking.Add(booking);
             await SaveChangesAsync();
         }
     }

@@ -32,7 +32,7 @@ namespace AcademyCalendarWebservice.Controllers
 
         // GET api/calendar/roomId/startTime/endTime
         [EnableCors("AllOrigins")]
-        [HttpGet("{roomId}/{startTime}/{endTime}")]
+        [HttpGet("{roomId}/{startTime}/{endTime}", Name = "GetBooking")]
         public async Task<JsonResult> Get(int roomId, DateTime startTime, DateTime endTime)
         {
             var result = await context.GetBookings(roomId, startTime, endTime);
@@ -42,13 +42,13 @@ namespace AcademyCalendarWebservice.Controllers
         // POST api/calendar/book
         [EnableCors("AllowHeaders")]
         [HttpPost("book")]
-        public async Task<bool> Create([FromBody]BookingVM booking)
+        public async Task<IActionResult> Create([FromBody]Booking booking)
         {
             if (booking == null)
-                return false;
-            //await context.BookRoom(booking);
+                return BadRequest();
+            await context.BookRoom(booking);
             var message = booking;
-            return true;
+            return CreatedAtRoute("GetBooking", new { id = booking.Id }, booking);
         }
 
         // PUT api/values/5
