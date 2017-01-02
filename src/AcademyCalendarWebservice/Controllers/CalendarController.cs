@@ -42,19 +42,42 @@ namespace AcademyCalendarWebservice.Controllers
         // POST api/calendar/book
         [EnableCors("AllowHeaders")]
         [HttpPost("book")]
-        public async Task<bool> Create([FromBody]Booking booking)
+        public async Task<IActionResult> Create([FromBody]BookingCreate booking)
         {
             if (booking == null)
-                return false;
+                return BadRequest();
             await context.BookRoom(booking);
-            var message = booking;
-            return true;
+
+            var routeParameters = new
+            {
+                roomId = booking.RoomId,
+                startTime = booking.StartTime,
+                endTime = booking.EndTime
+            };
+
+            var uri = "api/calendar/roomId/startTime/endTime";
+
+            return Created(uri, routeParameters);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        // PUT api/calendar/book
+        [EnableCors("AllowHeaders")]
+        [HttpPut("book/{id}")]
+        public async Task<IActionResult> UpdateBooking(int id, [FromBody]BookingCreate newBooking)
         {
+            if (newBooking == null || newBooking.Id != id)
+                return BadRequest();
+
+            var BookingToUpdate = context.FindExistingBooking(newBooking);
+
+            if (BookingToUpdate == null)
+                return NotFound();
+            else if (BookingToUpdate.OccupantId != newBooking.OccupantId || BookingToUpdate.RoomId != newBooking.RoomId)
+                return BadRequest();
+
+            await context.UpdateBooking(newBooking);
+
+            return new NoContentResult();
         }
 
         // DELETE api/values/5

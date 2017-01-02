@@ -64,7 +64,7 @@ namespace AcademyCalendarWebservice
             {
                 config.CreateMap<Room, RoomVM>();
                 config.CreateMap<Booking, BookingVM>();
-                config.CreateMap<BookingVM, Booking>();
+                config.CreateMap<BookingCreate, Booking>();
             });
         }
 

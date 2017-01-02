@@ -10,19 +10,19 @@ $(document).ready(function () {
 
 });
 
-function getCalendar(roomID) {
+function getCalendar(roomId) {
 
 
     // Find the room with the ID passed into the function
-    var findRoom = function (roomID) {
+    var findRoom = function (roomId) {
         for (var i = 0; i < roomList.length; i++) {
-            if (roomList[i].id === roomID) {
+            if (roomList[i].id === roomId) {
                 return roomList[i];
             }
         }
     }
 
-    var room = findRoom(roomID);
+    var room = findRoom(roomId);
 
     ShowRoomIcons(room);
 
@@ -36,7 +36,7 @@ function getCalendar(roomID) {
         defaultView: 'agendaWeek',
         editable: true,
         viewRender: function (view, element) {
-            LoadEvents(room.id);
+            LoadViewEvents(room.id);
         },
         // Add the details to the displayed element 
         eventRender: function (event, element) {
@@ -44,23 +44,30 @@ function getCalendar(roomID) {
             element.append("\n");
             element.append(event.details);
         },
+        eventOverlap: false,
         selectable: true,
+        selectOverlap: false,
         select: function (start, end) {
             CreateBooking(start, end, room, 2);
-            LoadEvents(room.id);
+        },
+        eventDrop: function (event, delta, revertFunc) {
+            UpdateBooking(event, revertFunc);
         }
+        // eventResize:
     });
 }
 
-
-function LoadEvents(roomID) {
-
-
-
+function LoadViewEvents(roomId) {
     var startTime = $('#calendar').fullCalendar('getView').intervalStart.format();
     var endTime = $('#calendar').fullCalendar('getView').intervalEnd.format();
 
-    var url = baseUrl + roomID + '/' + startTime + '/' + endTime;
+    var url = baseUrl + roomId + '/' + startTime + '/' + endTime;
+
+    LoadEvents(url);
+}
+
+
+function LoadEvents(url) {
 
     $.getJSON(url, function (result) {
         var existingEvents = $('#calendar').fullCalendar('clientEvents');
@@ -82,7 +89,9 @@ function LoadEvents(roomID) {
                     start: result[i].startTime.toLocaleString(),
                     end: result[i].endTime.toLocaleString(),
                     title: result[i].title,
-                    occupantName: result[i].occupantName
+                    occupantName: result[i].occupantName,
+                    roomId: result[i].roomId,
+                    occupantId: result[i].occupantId
                 });
                 
                 if (result[i].details) // if truthy, i.e. not null
@@ -141,6 +150,9 @@ function ShowRoomIcons(room) {
 function CreateBooking(start, end, room, occupantId) {
 
     var title = prompt("Ange en rubrik:");
+    if (!title)
+        return;
+
     var details = prompt("Ange en beskrivning (optional)", "");
 
     var booking = new Booking(start.format(), end.format(), room.id, occupantId, title, details);
@@ -151,10 +163,26 @@ function CreateBooking(start, end, room, occupantId) {
         data: JSON.stringify(booking),
         contentType: 'application/json',
         success: function (result) {
-            console.log(result);
+            var eventUrl = baseUrl + result.roomId + '/' + result.startTime + '/' + result.endTime;
+            LoadEvents(eventUrl);
         }
     });
 
+}
+
+function UpdateBooking(event, revertFunc) {
+    var booking = new Booking(event.start.format(), event.end.format(), event.roomId, event.occupantId, event.title, event.details);
+    booking.id = event.id;
+
+    $.ajax({
+        type: 'PUT',
+        url: (baseUrl + 'book/' + event.id),
+        data: JSON.stringify(booking),
+        contentType: 'application/json',
+        error: function (jqXHR, textStatus, errorThrown) {
+            revertFunc();
+        }
+    });
 }
 
 function Booking(startTime, endTime, roomId, occupantId, title, details) {
