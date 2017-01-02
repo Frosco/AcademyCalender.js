@@ -24,29 +24,7 @@ function getCalendar(roomID) {
 
     var room = findRoom(roomID);
 
-    $("#title").text(room.name + ' (' + room.capacity + ' platser)');
-
-    if (room.hasTvScreen === true) {
-        $('#Tvimage').fadeIn();
-    }
-    else {
-        $('#Tvimage').fadeOut();
-    }
-
-    if (room.hasProjector === true) {
-        $('#Projectorimage').fadeIn();
-    }
-    else {
-        $('#Projectorimage').fadeOut();
-    }
-
-    if (room.hasWhiteBoard === true) {
-        $('#Whiteboardimage').fadeIn();
-    }
-    else {
-        $('#Whiteboardimage').fadeOut();
-    }
-
+    ShowRoomIcons(room);
 
     $('#calendar').fullCalendar('destroy');
     $('#calendar').fullCalendar({
@@ -60,8 +38,16 @@ function getCalendar(roomID) {
         viewRender: function (view, element) {
             LoadEvents(room.id);
         },
+        // Add the details to the displayed element 
         eventRender: function (event, element) {
-            element.append(event.description)
+            element.append(event.occupantName);
+            element.append("\n");
+            element.append(event.details);
+        },
+        selectable: true,
+        select: function (start, end) {
+            CreateBooking(start, end, room, 2);
+            LoadEvents(room.id);
         }
     });
 }
@@ -96,12 +82,15 @@ function LoadEvents(roomID) {
                     start: result[i].startTime.toLocaleString(),
                     end: result[i].endTime.toLocaleString(),
                     title: result[i].title,
-                    description: result[i].occupantName
+                    occupantName: result[i].occupantName
                 });
+                
+                if (result[i].details) // if truthy, i.e. not null
+                    newEvents[newEvents.length - 1].details = result[i].details;
             }
 
         }
-        console.log(newEvents);
+
         $('#calendar').fullCalendar('renderEvents', newEvents, true);
     });
 }
@@ -124,23 +113,55 @@ function GetRooms() {
     })
 }
 
-function DontCall() {
-    var booking = {
-        startTime: '2016-12-30T17:00:00',
-        endTime: '2016-12-30T18:00:00',
-        roomId: 1,
-        occupantId: 2,
-        title: 'Mote',
-        description: 'Very important'
-    };
+function ShowRoomIcons(room) {
+    $("#title").text(room.name + ' (' + room.capacity + ' platser)');
 
-    console.log(booking);
-    console.log(JSON.stringify(booking));
+    if (room.hasTvScreen === true) {
+        $('#Tvimage').fadeIn();
+    }
+    else {
+        $('#Tvimage').fadeOut();
+    }
+
+    if (room.hasProjector === true) {
+        $('#Projectorimage').fadeIn();
+    }
+    else {
+        $('#Projectorimage').fadeOut();
+    }
+
+    if (room.hasWhiteBoard === true) {
+        $('#Whiteboardimage').fadeIn();
+    }
+    else {
+        $('#Whiteboardimage').fadeOut();
+    }
+}
+
+function CreateBooking(start, end, room, occupantId) {
+
+    var title = prompt("Ange en rubrik:");
+    var details = prompt("Ange en beskrivning (optional)", "");
+
+    var booking = new Booking(start.format(), end.format(), room.id, occupantId, title, details);
 
     $.ajax({
         type: 'POST',
         url: (baseUrl + 'book'),
         data: JSON.stringify(booking),
-        contentType: 'application/json'
+        contentType: 'application/json',
+        success: function (result) {
+            console.log(result);
+        }
     });
+
+}
+
+function Booking(startTime, endTime, roomId, occupantId, title, details) {
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.roomId = roomId;
+    this.occupantId = occupantId;
+    this.title = title;
+    this.details = details;
 }

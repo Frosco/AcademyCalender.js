@@ -13,7 +13,7 @@ namespace AcademyCalendarWebservice.Models
         public int RoomId { get; set; }
         public int OccupantId { get; set; }
         public string Title { get; set; }
-        public string Description { get; set; }
+        public string Details { get; set; }
         public string OccupantName { get; set; }
     }
 }

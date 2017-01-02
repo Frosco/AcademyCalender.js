@@ -42,13 +42,13 @@ namespace AcademyCalendarWebservice.Controllers
         // POST api/calendar/book
         [EnableCors("AllowHeaders")]
         [HttpPost("book")]
-        public async Task<IActionResult> Create([FromBody]Booking booking)
+        public async Task<bool> Create([FromBody]Booking booking)
         {
             if (booking == null)
-                return BadRequest();
+                return false;
             await context.BookRoom(booking);
             var message = booking;
-            return CreatedAtRoute("GetBooking", new { id = booking.Id }, booking);
+            return true;
         }
 
         // PUT api/values/5

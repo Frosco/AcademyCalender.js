@@ -38,6 +38,7 @@ namespace AcademyCalendarWebservice
             var connString = @"Data Source=localhost;Initial Catalog=Frank;Integrated Security=True";
 
             // Enable Cross origin requests, because the AJAX POST calls on the front end require this.
+            // The policies are used as decorators on Controllers or Actions.
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowHeaders",

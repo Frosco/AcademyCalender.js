@@ -16,7 +16,7 @@ namespace AcademyCalendarWebservice.Models.Entities
         {
             modelBuilder.Entity<Booking>(entity =>
             {
-                entity.Property(e => e.Decription).HasColumnType("varchar(max)");
+                entity.Property(e => e.Details).HasColumnType("varchar(max)");
 
                 entity.Property(e => e.EndTime).HasColumnType("datetime");
 

@@ -11,7 +11,7 @@ namespace AcademyCalendarWebservice.Models.Entities
         public int RoomId { get; set; }
         public int OccupantId { get; set; }
         public string Title { get; set; }
-        public string Decription { get; set; }
+        public string Details { get; set; }
 
         public virtual Occupant Occupant { get; set; }
         public virtual Room Room { get; set; }

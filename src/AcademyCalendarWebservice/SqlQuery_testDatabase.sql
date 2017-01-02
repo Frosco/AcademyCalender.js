@@ -1,4 +1,4 @@
-﻿--create database Frank
+﻿create database Frank
 go
 use Frank
 go
@@ -29,9 +29,9 @@ create table Booking(
     Room_Id int not null constraint FK_BookingRoom foreign key references Room(Id),
     Occupant_Id int not null constraint FK_BookingOccupant foreign key references Occupant(Id),
     Title varchar(64) not null,
-    Decription varchar(max) null,
+    Details varchar(max) null,
 )
 go
 
-sp_rename 'Frank.Decription', 'Description', 'COLUMN';
-go
+--sp_rename 'Booking.Description', 'Details', 'COLUMN';
+--go
