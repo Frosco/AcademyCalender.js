@@ -10,17 +10,18 @@ $(document).ready(function () {
 
 });
 
+function findRoom (roomId) {
+    for (var i = 0; i < roomList.length; i++) {
+        if (roomList[i].id === roomId) {
+            return roomList[i];
+        }
+    }
+}
+
 function getCalendar(roomId) {
 
 
     // Find the room with the ID passed into the function
-    var findRoom = function (roomId) {
-        for (var i = 0; i < roomList.length; i++) {
-            if (roomList[i].id === roomId) {
-                return roomList[i];
-            }
-        }
-    }
 
     var room = findRoom(roomId);
 
@@ -43,17 +44,21 @@ function getCalendar(roomId) {
             element.append(event.occupantName);
             element.append("\n");
             element.append(event.details);
+            AddContextMenuToEvent(event, element);
         },
         eventOverlap: false,
         selectable: true,
         selectOverlap: false,
         select: function (start, end) {
+            $(".custom-menu").hide(100); // Hiding a possibly open context menu.
             CreateBooking(start, end, room, 2);
         },
         eventDrop: function (event, delta, revertFunc) {
             UpdateBooking(event, revertFunc);
-        }
-        // eventResize:
+        },
+        eventResize: function (event, delta, revertFunc) {
+            UpdateBooking(event, revertFunc);
+        },
     });
 }
 
@@ -93,7 +98,7 @@ function LoadEvents(url) {
                     roomId: result[i].roomId,
                     occupantId: result[i].occupantId
                 });
-                
+
                 if (result[i].details) // if truthy, i.e. not null
                     newEvents[newEvents.length - 1].details = result[i].details;
             }
@@ -184,6 +189,7 @@ function UpdateBooking(event, revertFunc) {
         }
     });
 }
+
 
 function Booking(startTime, endTime, roomId, occupantId, title, details) {
     this.startTime = startTime;

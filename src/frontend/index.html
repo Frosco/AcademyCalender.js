@@ -7,6 +7,7 @@
     <link href="node_modules/fullcalendar/dist/fullcalendar.css" rel="stylesheet" />
     <link href="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.css" rel="stylesheet" />
     <link href="Styles/StyleSheet.css" rel="stylesheet" />
+    <link href="Styles/ContextMenu.css" rel="stylesheet" />
 </head>
 <body>
     <div class="header">
@@ -89,6 +90,15 @@
             </div>
         </div>
     </div>
+
+    
+    <ul class='custom-menu'>
+        <li data-action="edit">Edit title and description</li>
+        <li data-action="delete">Delete event</li>
+    </ul>
+
+
+
     <script src="node_modules/jquery/dist/jquery.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script src="node_modules/moment/moment.js"></script>
@@ -96,5 +106,6 @@
     <script src="node_modules/fullcalendar/dist/locale/sv.js"></script>
     <script src="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.js"></script>
     <script src="Scripts/CalendarHandler.js"></script>
+    <script src="Scripts/ContextMenu.js"></script>
 </body>
 </html>
