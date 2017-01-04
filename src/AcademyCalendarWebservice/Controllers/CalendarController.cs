@@ -30,7 +30,7 @@ namespace AcademyCalendarWebservice.Controllers
             return Json(result);
         }
 
-        // GET api/calendar/roomId/startTime/endTime
+        // GET api/calendar/1/2016-12-05/2016-12-12
         [EnableCors("AllOrigins")]
         [HttpGet("{roomId}/{startTime}/{endTime}", Name = "GetBooking")]
         public async Task<JsonResult> Get(int roomId, DateTime startTime, DateTime endTime)
@@ -60,7 +60,7 @@ namespace AcademyCalendarWebservice.Controllers
             return Created(uri, routeParameters);
         }
 
-        // PUT api/calendar/book
+        // PUT api/calendar/book/5
         [EnableCors("AllowHeaders")]
         [HttpPut("book/{id}")]
         public async Task<IActionResult> UpdateBooking(int id, [FromBody]BookingCreate newBooking)
@@ -80,10 +80,18 @@ namespace AcademyCalendarWebservice.Controllers
             return new NoContentResult();
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // DELETE api/calendar/book/5
+        [EnableCors("AllowHeaders")]
+        [HttpDelete("book/{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
+            var bookingToDelete = context.FindExistingBooking(id);
+            if (bookingToDelete == null)
+                return NotFound();
+
+            await context.DeleteBooking(bookingToDelete);
+
+            return new NoContentResult();
         }
     }
 }

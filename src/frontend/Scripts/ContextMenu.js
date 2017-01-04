@@ -47,7 +47,7 @@ $(".custom-menu li").click(function () {
 
         // A case for each action. Your actions here
         case "edit": EditTitle(event); break;
-        case "delete": alert(eventId); break;
+        case "delete": DeleteBooking(event); break;
     }
 
     // Hide it AFTER the action was triggered
@@ -55,7 +55,7 @@ $(".custom-menu li").click(function () {
 });
 
 function EditTitle(event) {
-    // Cloning the event to be able to perform a Rollback if the AJAX call in UpdateBooking fails.
+    // Cloning the event to be able to perform a rollback if the AJAX call in UpdateBooking fails.
     var formerEvent = jQuery.extend({}, event);
 
     var title = prompt("Ange en rubrik:");
@@ -75,4 +75,6 @@ function EditTitle(event) {
 
     UpdateBooking(event, Rollback);
 }
+
+
 

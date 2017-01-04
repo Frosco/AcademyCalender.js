@@ -49,8 +49,8 @@ namespace AcademyCalendarWebservice
                 options.AddPolicy("AllOrigins",
                     builder => builder.AllowAnyOrigin()
                     .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    );
+                    .WithMethods("GET")
+                        );
             });
 
             services.AddDbContext<CalendarContext>(o =>

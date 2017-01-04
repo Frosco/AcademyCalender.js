@@ -2,6 +2,8 @@
 'use strict';
 
 var baseUrl = 'http://localhost:18332/api/calendar/';
+var roomRoute = 'rooms';
+var bookingRoute = 'book';
 var roomList = new Array();
 
 $(document).ready(function () {
@@ -10,7 +12,8 @@ $(document).ready(function () {
 
 });
 
-function findRoom (roomId) {
+// Find the room object with the ID passed into the function
+function findRoom(roomId) {
     for (var i = 0; i < roomList.length; i++) {
         if (roomList[i].id === roomId) {
             return roomList[i];
@@ -19,9 +22,6 @@ function findRoom (roomId) {
 }
 
 function getCalendar(roomId) {
-
-
-    // Find the room with the ID passed into the function
 
     var room = findRoom(roomId);
 
@@ -37,7 +37,7 @@ function getCalendar(roomId) {
         defaultView: 'agendaWeek',
         editable: true,
         viewRender: function (view, element) {
-            LoadViewEvents(room.id);
+            LoadEventsForView(room.id);
         },
         // Add the details to the displayed element 
         eventRender: function (event, element) {
@@ -62,7 +62,7 @@ function getCalendar(roomId) {
     });
 }
 
-function LoadViewEvents(roomId) {
+function LoadEventsForView(roomId) {
     var startTime = $('#calendar').fullCalendar('getView').intervalStart.format();
     var endTime = $('#calendar').fullCalendar('getView').intervalEnd.format();
 
@@ -110,7 +110,7 @@ function LoadEvents(url) {
 }
 
 function GetRooms() {
-    var roomUrl = baseUrl + 'rooms';
+    var roomUrl = baseUrl + roomRoute;
 
     $.getJSON(roomUrl, function (result) {
 
@@ -164,7 +164,7 @@ function CreateBooking(start, end, room, occupantId) {
 
     $.ajax({
         type: 'POST',
-        url: (baseUrl + 'book'),
+        url: (baseUrl + bookingRoute),
         data: JSON.stringify(booking),
         contentType: 'application/json',
         success: function (result) {
@@ -181,11 +181,25 @@ function UpdateBooking(event, revertFunc) {
 
     $.ajax({
         type: 'PUT',
-        url: (baseUrl + 'book/' + event.id),
+        url: (baseUrl + bookingRoute + '/' + event.id),
         data: JSON.stringify(booking),
         contentType: 'application/json',
         error: function (jqXHR, textStatus, errorThrown) {
+            alert("It was not possible to change the event due to a server error: " + textStatus);
             revertFunc();
+        }
+    });
+}
+
+function DeleteBooking(event) {
+    $.ajax({
+        type: 'DELETE',
+        url: (baseUrl + bookingRoute + '/' + event.id),
+        success: function () {
+            $('#calendar').fullCalendar('removeEvents', event.id);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("It was not possible to delete the event due to a server error: " + textStatus);
         }
     });
 }

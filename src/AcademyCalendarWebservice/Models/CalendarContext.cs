@@ -42,6 +42,11 @@ namespace AcademyCalendarWebservice.Models.Entities
             return Booking.First(b => b.Id == newBooking.Id);
         }
 
+        public Booking FindExistingBooking(int bookingId)
+        {
+            return Booking.First(b => b.Id == bookingId);
+        }
+
         public async Task UpdateBooking(BookingCreate booking)
         {
             var bookingToUpdate = FindExistingBooking(booking);
@@ -54,6 +59,12 @@ namespace AcademyCalendarWebservice.Models.Entities
                     propertyInfo.SetValue(bookingToUpdate, propertyInfo.GetValue(newBooking));
             }
 
+            await SaveChangesAsync();
+        }
+
+        public async Task DeleteBooking(Booking booking)
+        {
+            Booking.Remove(booking);
             await SaveChangesAsync();
         }
     }
