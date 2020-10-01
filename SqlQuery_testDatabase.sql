@@ -1,7 +1,8 @@
-﻿CREATE TABLE [dbo].[Booking] (
+﻿CREATE TABLE [dbo].[Booking]
+ (
     [Id]          INT           IDENTITY (1, 1) NOT NULL,
-    [StartTime]   DATETIME      NOT NULL,
-    [EndTime]     DATETIME      NOT NULL,
+    [StartingTime]   DATETIME      NOT NULL,
+    [EndingTime]     DATETIME      NOT NULL,
     [Room_Id]     INT           NOT NULL,
     [Occupant_Id] INT           NOT NULL,
     [Title]       VARCHAR (64)  NOT NULL,
